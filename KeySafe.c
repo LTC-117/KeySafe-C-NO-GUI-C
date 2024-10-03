@@ -2,16 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX 100
+
 //Variables:
-typedef struct {
+struct {
     char userName[20];
     char pass[20];
     char confirm[20];
     char checkUser [20];
     char checkPass [20];
-} userInfo;
+} userInfo[MAX];
 
-userInfo p;
 int opt;
 unsigned int key = 143; //Could change
 
@@ -19,21 +20,24 @@ unsigned int key = 143; //Could change
 void login();
 void create();
 void xorCrypt();
+int check_list();
+void init_list();
+int check_account();
 
 int main(){
 
     printf("WELCOME! \nInsert the option you want: \n\n");
     printf(" 1-Login \n 2-Create Account \n 3-Exit \n\n");
 
+    init_list();
+
     do{
         printf("Option: ");
         scanf("%d", &opt);
         switch(opt){
-
             case 1: login(); break;
             case 2: create(); break;
             case 3: printf("Goodbye!"); break;
-
             default: printf("Invalid operation! Try again: \n");
         }
     } while (opt != 3);
@@ -41,17 +45,39 @@ int main(){
     return 0;
 }
 
+void init_list(void){
+    register int t;
+
+    for(t=0; t<MAX; ++t){
+        userInfo[t].userName[0] = '\0';
+    }
+}
+
+int check_list(){
+    register int t;
+
+    for(t=0; userInfo[t].userName[0] && t<MAX; ++t);
+
+    if(t==MAX) return -1;
+
+    return t;
+}
+
 void login(void){
+    int i;
 
     scanf("%*c"); //Cleans "\n" (ENTER) off the buffer
+    printf("Which user are you? ");
+    scanf("%d", &i);
+    scanf("%*c");
     printf("Username: \n");
-    fgets(p.checkUser, 20, stdin);
+    fgets(userInfo[i].checkUser, 20, stdin);
     printf("Password: \n");
-    fgets(p.checkPass, 20, stdin);
-    xorCrypt(p.checkPass, key);
+    fgets(userInfo[i].checkPass, 20, stdin);
+    xorCrypt(userInfo[i].checkPass, key);
 
-    if (strcmp(p.checkUser, p.userName)==0&&strcmp(p.checkPass, p.pass)==0){
-        printf("Welcome back %s", p.userName);
+    if (strcmp(userInfo[i].checkUser, userInfo[i].userName)==0&&strcmp(userInfo[i].checkPass, userInfo[i].pass)==0){
+        printf("Welcome back user %d: %s", i, userInfo[i].userName);
     }
     else{
         printf("Account not found! Try again: \n");
@@ -59,19 +85,27 @@ void login(void){
 }
 
 void create(void){
+    int slot;
+
+    slot = check_list();
+    if(slot==-1){
+        printf("\nList of users is full! Delete an account to create another one!");
+        return;
+    }
 
     scanf("%*c");
     printf("Create your new username: \n");
-    fgets(p.userName, 20, stdin);
+    fgets(userInfo[slot].userName, 20, stdin);
     printf("Now create your new password: \n");
-    fgets(p.pass, 20, stdin);
-    xorCrypt(p.pass, key);
+    fgets(userInfo[slot].pass, 20, stdin);
+    xorCrypt(userInfo[slot].pass, key);
     printf("Confirm your password: \n");
-    fgets(p.confirm, 20, stdin);
-    xorCrypt(p.confirm, key);
+    fgets(userInfo[slot].confirm, 20, stdin);
+    xorCrypt(userInfo[slot].confirm, key);
 
-    if(strcmp(p.confirm, p.pass) == 0){
+    if(strcmp(userInfo[slot].confirm, userInfo[slot].pass) == 0){
         printf("Your account has been created successfully! \n");
+        printf("You are the user: %d\n", slot);
         printf("Try to log in now: \n");
     }
 
