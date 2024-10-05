@@ -22,10 +22,8 @@ void create();
 void xorCrypt();
 int check_list();
 void init_list();
-int check_account();
 
 int main(){
-
     printf("WELCOME! \nInsert the option you want: \n\n");
     printf(" 1-Login \n 2-Create Account \n 3-Exit \n\n");
 
