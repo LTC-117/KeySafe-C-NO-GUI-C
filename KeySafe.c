@@ -43,7 +43,7 @@ int main(){
     return 0;
 }
 
-void init_list(void){
+void init_list(void){   //Initializes the next blank list
     register int t;
 
     for(t=0; t<MAX; ++t){
