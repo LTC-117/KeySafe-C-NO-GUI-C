@@ -27,7 +27,7 @@ int main(){
     printf("WELCOME! \nInsert the option you want: \n\n");
     printf(" 1-Login \n 2-Create Account \n 3-Exit \n\n");
 
-    init_list();
+    init_list();    //Initializes the list
 
     do{
         printf("Option: ");
@@ -51,7 +51,7 @@ void init_list(void){
     }
 }
 
-int check_list(){
+int check_list(){   //Checks if there's space for a new list
     register int t;
 
     for(t=0; userInfo[t].userName[0] && t<MAX; ++t);
@@ -63,10 +63,11 @@ int check_list(){
 
 void login(void){
     int i;
-
+    //Checks which account it is (by number)
     scanf("%*c"); //Cleans "\n" (ENTER) off the buffer
     printf("Which user are you? ");
     scanf("%d", &i);
+    //Shows user info
     scanf("%*c");
     printf("Username: \n");
     fgets(userInfo[i].checkUser, 20, stdin);
@@ -84,24 +85,26 @@ void login(void){
 
 void create(void){
     int slot;
-
+    //Checks if there's space for a new list
     slot = check_list();
     if(slot==-1){
         printf("\nList of users is full! Delete an account to create another one!");
         return;
     }
-
+    //New Username
     scanf("%*c");
     printf("Create your new username: \n");
     fgets(userInfo[slot].userName, 20, stdin);
+    //New passord
     printf("Now create your new password: \n");
     fgets(userInfo[slot].pass, 20, stdin);
-    xorCrypt(userInfo[slot].pass, key);
+    xorCrypt(userInfo[slot].pass, key); //Encrypts the password
+    //Password confitmation
     printf("Confirm your password: \n");
     fgets(userInfo[slot].confirm, 20, stdin);
-    xorCrypt(userInfo[slot].confirm, key);
+    xorCrypt(userInfo[slot].confirm, key);  //Encrypts the confirmation
 
-    if(strcmp(userInfo[slot].confirm, userInfo[slot].pass) == 0){
+    if(strcmp(userInfo[slot].confirm, userInfo[slot].pass) == 0){ //Checks password
         printf("Your account has been created successfully! \n");
         printf("You are the user: %d\n", slot);
         printf("Try to log in now: \n");
@@ -112,7 +115,7 @@ void create(void){
     }
 }
 
-void xorCrypt(char *data, int key){
+void xorCrypt(char *data, int key){ //Simple encryption system
 
     int siz = strlen (data);
 
