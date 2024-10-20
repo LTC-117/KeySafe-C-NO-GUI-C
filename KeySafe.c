@@ -33,10 +33,17 @@ int main(){
         printf("Option: ");
         scanf("%d", &opt);
         switch(opt){
-            case 1: login(); break;
-            case 2: create(); break;
-            case 3: printf("Goodbye!"); break;
-            default: printf("Invalid operation! Try again: \n");
+            case 1:
+                login();
+                break;
+            case 2:
+                create();
+                break;
+            case 3:
+                printf("Goodbye!");
+                break;
+            default:
+                printf("Invalid operation! Try again: \n");
         }
     } while (opt != 3);
 
